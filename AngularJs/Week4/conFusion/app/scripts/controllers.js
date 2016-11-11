@@ -123,7 +123,7 @@
           $scope.featureDish = menuFactory.getDishes().get({id:0})
           .$promise.then(
               function(response){ 
-                  $scope.dish = response;
+                  $scope.featureDish = response;
                   $scope.showDish = true;
                   },
               function(response) {
