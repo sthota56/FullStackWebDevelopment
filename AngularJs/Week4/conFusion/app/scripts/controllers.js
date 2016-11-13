@@ -55,7 +55,7 @@
 
             }])
 
-            .controller('FeedbackController', ['$scope', function($scope) {
+            .controller('FeedbackController', ['$scope','feedbackFactory', function($scope,feedbackFactory) {
 
                 $scope.sendFeedback = function() {
 
@@ -63,7 +63,7 @@
 
                     if ($scope.feedback.agree && ($scope.feedback.mychannel == "")) {
                         $scope.invalidChannelSelection = true;
-                        console.log('incorrect');
+                        console.log('incorrect');                
                     }
                     else {
                         $scope.invalidChannelSelection = false;
@@ -72,6 +72,11 @@
                         $scope.feedbackForm.$setPristine();
                         console.log($scope.feedback);
                     }
+                    
+                      
+                        $scope.feedback.push($scope.feedback);
+
+                feedbackFactory.saveFeedback().$save($scope.feedback);
                 };
             }])
 
@@ -96,21 +101,28 @@
                 $scope.mycomment = {rating:5, comment:"", author:"", date:""};
 
                 $scope.submitComment = function () {
-                    $scope.mycomment.date = new Date().toISOString();
-                    console.log($scope.mycomment);
-                    $scope.dish.comments.push($scope.mycomment);
+                                $scope.mycomment.date = new Date().toISOString();
+                console.log($scope.mycomment);
+                                $scope.dish.comments.push($scope.mycomment);
 
-                    menuFactory.getDishes().update({id:$scope.dish.id},$scope.dish);
-                    $scope.commentForm.$setPristine();
-                    $scope.mycomment = {rating:5, comment:"", author:"", date:""};
-                }
+                menuFactory.getDishes().update({id:$scope.dish.id},$scope.dish);
+                                $scope.commentForm.$setPristine();
+                                $scope.mycomment = {rating:5, comment:"", author:"", date:""};
+            }
             }])
 
     .controller('AboutController',['$scope','corporateFactory',function($scope, corporateFactory){
-          $scope.showLeader = true;
-                $scope.message="Loading ...";
+        $scope.showLeader = false;
+        $scope.message="Loading ...";
 
-       $scope.leaders = corporateFactory.getLeaders().query();
+       $scope.leaders = corporateFactory.getLeaders().query(
+           function(response) {
+                        $scope.leaders = response;
+                        $scope.showLeader = true;
+                    },
+                    function(response) {
+                        $scope.message = "Error: "+response.status + " " + response.statusText;
+                    });
 
     }])
 
@@ -118,8 +130,8 @@
 
         $scope.showDish = false;
         $scope.message="Loading ...";
-          $scope.showPromotion = true;
-          $scope.showSpecialist = true;
+          $scope.showPromotion = false;
+          $scope.showSpecialist = false;
           $scope.featureDish = menuFactory.getDishes().get({id:0})
           .$promise.then(
               function(response){ 
@@ -130,10 +142,28 @@
                   $scope.message = "Error: "+response.status + " " + response.statusText;
                   }
         );
-
-        $scope.promotion = menuFactory.getPromotion().get({id:0});
-
-         $scope.specialist = corporateFactory.getLeaders().get({id:3});
+        
+        $scope.promotion = menuFactory.getPromotion().get({id:0})
+          .$promise.then(
+              function(response){ 
+                  $scope.promotion = response;
+                  $scope.showPromotion = true;
+                  },
+              function(response) {
+                  $scope.message = "Error: "+response.status + " " + response.statusText;
+                  }
+        );
+        
+        $scope.specialist = menuFactory.getDishes().get({id:3})
+          .$promise.then(
+              function(response){ 
+                  $scope.specialist = response;
+                  $scope.showSpecialist = true;
+                  },
+              function(response) {
+                  $scope.message = "Error: "+response.status + " " + response.statusText;
+                  }
+        );
     }])
 
 
