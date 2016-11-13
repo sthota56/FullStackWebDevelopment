@@ -66,18 +66,15 @@
                         console.log('incorrect');                
                     }
                     else {
+                        $scope.feedback.push($scope.feedback);
+
+                feedbackFactory.saveFeedback().$save($scope.feedback);
                         $scope.invalidChannelSelection = false;
                         $scope.feedback = {mychannel:"", firstName:"", lastName:"", agree:false, email:"" };
                         $scope.feedback.mychannel="";
                         $scope.feedbackForm.$setPristine();
                         console.log($scope.feedback);
                     }
-                    
-                      
-                        $scope.feedback.push($scope.feedback);
-
-                feedbackFactory.saveFeedback().$save($scope.feedback);
-                };
             }])
 
             .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', function($scope, $stateParams, menuFactory) {
