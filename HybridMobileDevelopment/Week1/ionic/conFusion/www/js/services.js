@@ -57,7 +57,7 @@ angular.module('conFusion.services', ['ngResource'])
         favorites.push({id: index});
     };
 
-    return favFac;
+  
     
         favFac.deleteFromFavorites = function (index) {
         for (var i = 0; i < favorites.length; i++) {
@@ -70,7 +70,7 @@ angular.module('conFusion.services', ['ngResource'])
     favFac.getFavorites = function () {
         return favorites;
     };
-    
+      return favFac;
     
     }])
 
