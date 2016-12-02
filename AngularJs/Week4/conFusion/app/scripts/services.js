@@ -25,10 +25,7 @@ angular.module('confusionApp')
  .factory('feedbackFactory',['$resource','baseURL', function($resource,baseURL) {
             var feedbackfac = {};
             
-            feedbackfac.saveFeedback = function(){
-                 return $resource(baseURL+"feedback/:id",null,  {'save':{method:'POST' }});
-            };
-            return feedbackfac;
+            return $resource(baseURL+"feedback/:id");
         }])
 
 ;

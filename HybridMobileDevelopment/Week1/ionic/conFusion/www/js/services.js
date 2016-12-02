@@ -47,6 +47,11 @@
         };
 
         return favFac;
+    favFac.getFavorites = function () {
+        return favorites;
+    };
+      return favFac;
+    
     }])
     
     .factory('$localStorage', ['$window', function($window) {
