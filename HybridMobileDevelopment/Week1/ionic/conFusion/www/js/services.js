@@ -22,9 +22,9 @@
         return $resource(baseURL+"feedback/:id");
     }])
 
-    .factory('favoriteFactory', ['$resource', 'baseURL', function ($resource, baseURL) {
+    .factory('favoriteFactory', ['$resource', 'baseURL', '$localStorage', function ($resource, baseURL,$localStorage) {
         var favFac = {};
-        var favorites = [];
+        var favorites=[];
 
         favFac.addToFavorites = function (index) {
             for (var i = 0; i < favorites.length; i++) {
@@ -32,25 +32,24 @@
                     return;
             }
             favorites.push({id: index});
+            $localStorage.storeObject('favInfo',favorites);
         };
 
         favFac.deleteFromFavorites = function (index) {
             for (var i = 0; i < favorites.length; i++) {
                 if (favorites[i].id == index) {
                     favorites.splice(i, 1);
+                      $localStorage.storeObject('favInfo',favorites);
                 }
             }
+            
         }
 
         favFac.getFavorites = function () {
-            return favorites;
+            return $localStorage.getObject('favInfo','[]');
         };
 
         return favFac;
-    favFac.getFavorites = function () {
-        return favorites;
-    };
-      return favFac;
     
     }])
     
