@@ -1,29 +1,35 @@
 var express = require('express');
+var bodyparser = require('body-parser');
 
-var app = module.exports = express();
-    
-app.get('/',function(req,res,next){
+var leaderRouter = express.Router();
+leaderRouter.use(bodyparser.json());
+
+leaderRouter.route('/')
+.get(function(req,res,next){
         res.end('Will send all the leaders to you!');
-});
+})
 
-app.post('/',function(req, res, next){
+.post(function(req, res, next){
      res.end('Will add the leader: ' + req.body.name + ' with details: ' + req.body.description);
-});
+})
 
-app.delete('/',function(req, res, next){
+.delete(function(req, res, next){
         res.end('Deleting all leaders');
 });
 
-app.get('/:leaderId',function(req,res,next){
+leaderRouter.route('/:leaderId')
+.get(function(req,res,next){
         res.end('Will send details of the leader: ' + req.params.leaderId +' to you!');
 })
 
-app.put('/:leaderId',function(req, res, next){
+.put(function(req, res, next){
     res.write('Updating the leader: ' + req.params.leaderId + '\t\n');
     res.end('Will update the leader: ' + req.body.name + 
             ' with details: ' + req.body.description);
 })
 
-app.delete('/:leaderId', function(req, res, next){
+.delete(function(req, res, next){
         res.end('Deleting leader: ' + req.params.leaderId);
 });
+
+module.exports = leaderRouter;
